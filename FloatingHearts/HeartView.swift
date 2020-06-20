@@ -14,6 +14,7 @@ import Foundation
 struct HeartTheme {
     let fillColor: UIColor
     let strokeColor: UIColor
+    
     //using white borders for this example. Set your colors.
     static let availableThemes = [
         (UIColor(hex: 0xe66f5e), UIColor(white: 1.0, alpha: 0.8)),
@@ -26,15 +27,15 @@ struct HeartTheme {
         (UIColor(hex: 0x39d3d3), UIColor(white: 1.0, alpha: 0.8)),
         (UIColor(hex: 0xfed301), UIColor(white: 1.0, alpha: 0.8))
     ]
-
-    static func randomTheme() -> HeartTheme {
+    
+    static func randomColor() -> HeartTheme {
         let r = Int(randomNumber(cap: availableThemes.count))
         let theme = availableThemes[r]
         return HeartTheme(fillColor: theme.0, strokeColor: theme.1)
     }
 }
 
-// MARK: HeartView
+// MARK: - HeartView
 
 enum RotationDirection: CGFloat {
     case Left = -1
@@ -49,6 +50,8 @@ public class HeartView: UIView {
         static let Full: TimeInterval = 4.0
         static let Bloom: TimeInterval = 0.5
     }
+    
+    // MARK: - Init
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -60,7 +63,7 @@ public class HeartView: UIView {
         super.init(coder: aDecoder)
     }
 
-    // MARK: Animations
+    // MARK: - Animations
 
     public func animateInView(view: UIView) {
         guard let rotationDirection = RotationDirection(rawValue: CGFloat(1 - Int(2 * randomNumber(cap: 2)))) else { return }
@@ -128,7 +131,6 @@ public class HeartView: UIView {
     }
 
     private func animateToFinalAlpha(withDuration duration: TimeInterval = Durations.Full) {
-        
         UIView.animate(withDuration: duration, animations: {
             self.alpha = 0.0
         }) { (_) in
@@ -137,30 +139,28 @@ public class HeartView: UIView {
     }
 
     override public func draw(_ rect: CGRect) {
-
-#if true
-
-        let theme = HeartTheme.randomTheme()
+        #if true
+        
+        let selectedColor = HeartTheme.randomColor()
         let imageBundle = Bundle(for: HeartView.self)
         let heartImage = UIImage(named: "heart", in: imageBundle, compatibleWith: nil)
         let heartImageBorder = UIImage(named: "heartBorder", in: imageBundle, compatibleWith: nil)
-    
+        
         //Draw background image (mimics border)
-        theme.strokeColor.setFill()
+        selectedColor.strokeColor.setFill()
         heartImageBorder?.draw(in: rect, blendMode: .normal, alpha: 1.0)
-
+        
         //Draw foreground heart image
-        theme.fillColor.setFill()
+        selectedColor.fillColor.setFill()
         heartImage?.draw(in: rect, blendMode: .normal, alpha: 1.0)
-#else
+        #else
         //Just for fun. Draw heart using Bezier path
         drawHeartInRect(rect)
-#endif
+        #endif
     }
     
     private func drawHeartInRect(rect: CGRect) {
-        
-        let theme = HeartTheme.randomTheme()
+        let theme = HeartTheme.randomColor()
 
         theme.strokeColor.setStroke()
         theme.fillColor.setFill()

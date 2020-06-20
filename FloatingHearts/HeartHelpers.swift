@@ -57,14 +57,12 @@ extension Timer {
 // MARK: - Animaition Helpers
 
 public func spring(duration: TimeInterval, delay: TimeInterval, damping: CGFloat, velocity: CGFloat, animations: @escaping () -> Void) {
-    
     UIView.animate(withDuration: duration, delay: delay, usingSpringWithDamping: damping, initialSpringVelocity: velocity, options: [UIView.AnimationOptions.curveEaseOut], animations: {
             animations()
         }, completion: nil)
 }
 
 public func animate(duration: TimeInterval, delay: TimeInterval, animations: @escaping () -> Void, completion: @escaping () -> Void) {
-    
     UIView.animate(withDuration: duration, delay: delay, options: [], animations: {
         animations()
         }, completion: { finished in
